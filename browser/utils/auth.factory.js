@@ -3,21 +3,29 @@
 app.factory('AuthFactory', function ($http) {
 	var Auth = {}
 
-	// Auth.signup = function () {
-	// 	console.log(req.body);
-	// 	return $http.post('/api/users/', req.body)
-	// 	.then(function (res) {
-	// 		return new User(req.body);
-	// 	});
-	// };
+	Auth.signup = function (email, password) {
 
-	Auth.login = function (id) {
-		console.log('login button clicked', id)
-
-		return $http.get('/api/users/' + id)
-		.then(function (res) {
-			return res.data;	
+		// console.log(req.body);
+		return $http({
+			method: 'POST', 
+			url: '/api/signup/',
+			data: {email: email, password:password}
 		});
+	}
+
+	Auth.login = function (email, password) {
+		console.log('login button clicked', email, password)
+
+		
+		return $http({
+			method: 'POST',
+			url: '/auth/login',
+			data: {email:email}
+		})
+		.then(function(result){
+			console.log(result, "result");
+		})
+
 	};
 
 	return Auth;
