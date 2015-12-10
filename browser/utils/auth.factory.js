@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('AuthFactory', function ($http) {
+app.factory('AuthFactory', function ($http, $state) {
 	var Auth = {}
 
 	Auth.login = function (email) {
@@ -12,6 +12,7 @@ app.factory('AuthFactory', function ($http) {
 		})
 		.then(function(data){
 			console.log("login data here: ", data);
+			$state.go('home')
 		});
 	};
 
@@ -24,7 +25,19 @@ app.factory('AuthFactory', function ($http) {
 		})
 		.then(function(data){
 			console.log("signup data here: ", data);
+		})
+		.then(null, function(e){
+			console.log('e: ', e)
 		});
+	}
+
+	Auth.logout = function () {
+		console.log('logout button');
+		return $http({
+			method: 'GET', 
+			url: '/auth/logout/'
+		})
+		
 	}
 
 	return Auth;
