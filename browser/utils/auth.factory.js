@@ -2,6 +2,7 @@
 
 app.factory('AuthFactory', function ($http, $state) {
 	var Auth = {}
+	var currentUser;
 
 	Auth.login = function (email) {
 		console.log('login button clicked', email)		
@@ -10,8 +11,8 @@ app.factory('AuthFactory', function ($http, $state) {
 			url: '/auth/login',
 			data: { email: email }
 		})
-		.then(function(data){
-			console.log("login data here: ", data);
+		.then(function (data){
+			currentUser = data.data;
 			$state.go('home')
 		});
 	};
@@ -23,21 +24,30 @@ app.factory('AuthFactory', function ($http, $state) {
 			url: '/auth/signup/',
 			data: { email: email, password: password }
 		})
-		.then(function(data){
+		.then(function (data){
 			console.log("signup data here: ", data);
 		})
-		.then(null, function(e){
+		.then(null, function (e){
 			console.log('e: ', e)
 		});
 	}
 
 	Auth.logout = function () {
-		console.log('logout button');
+		console.log('logout button clicked');
 		return $http({
 			method: 'GET', 
 			url: '/auth/logout/'
 		})
-		
+		.then(function (data) {
+			currentUser = null;
+		})
+		.then(null, function (e){
+			console.log('e: ', e)
+		});
+	}
+
+	Auth.getCurrentUser = function () {
+		return currentUser;
 	}
 
 	return Auth;

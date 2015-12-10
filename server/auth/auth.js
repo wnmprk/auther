@@ -6,7 +6,7 @@ var session = require('express-session');
 router.post('/login', function (req, res){
 	User.findOne({ email: req.body.email })
 	.then(function(daPerson){
-		console.log('req session: ', req.session)
+		console.log(daPerson)
 		req.session.userId = daPerson._id;
 		res.json(daPerson);
 	})
