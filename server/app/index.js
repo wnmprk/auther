@@ -3,11 +3,13 @@
 var app = require('express')();
 var path = require('path');
 var session = require('express-session');
+var passport =require('passport');
 
 app.use(session({
     // this mandatory configuration ensures that session IDs are not predictable
     secret: 'tongiscool'
 }));
+
 
 app.use(require('./logging.middleware'));
 
@@ -21,11 +23,19 @@ app.use(function(req, res,  next){
 	next();	
 })
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/me', require('../auth/me.js'));
+
 app.use('/auth', require('../auth/auth.js'));
 
 
 
 app.use('/api', require('../api/api.router'));
+
+
+
 
 
 var validFrontendRoutes = ['/', '/stories', '/users', '/stories/:id', '/users/:id', '/signup', '/login'];
